@@ -321,6 +321,16 @@
        @include('livewire.modals.evidencia-image-actividad')
      </div>
 
+     <div id="default-modal-evidencia-tarea-image" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        @include('livewire.modals.evidencia-image-tarea')
+      </div>
 
+      <div id="default-modal-agregar-evidencia-tarea" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        @include('livewire.modals.agregar-evidencia-tarea')
+      </div>
+
+      <div id="default-modal-agregar-evidencia-actividad" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        @include('livewire.modals.agregar-evidencia-actividad')
+      </div>
 
 </div>

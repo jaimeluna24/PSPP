@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('observacion')->nullable();
             $table->date('fecha_inicio');
             $table->date('fecha_final');
+            $table->boolean('active')->default(true);
             $table->unsignedBigInteger('actividad_id');
             $table->foreign('actividad_id')->references('id')->on('actividads')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -17,10 +17,14 @@ return new class extends Migration
             $table->string('descripcion');
             $table->string('area');
             $table->string('encargado');
+            $table->string('avatar')->nullable();
             $table->boolean('active')->default(true);
-            $table->unsignedBigInteger('fecha_id');
-            $table->foreign('fecha_id')->references('id')->on('fechas')->onDelete('cascade');
+            $table->date('fecha_inicio');
+            $table->date('fecha_final');
+            $table->unsignedBigInteger('semana_id');
+            $table->foreign('semana_id')->references('id')->on('semanas')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
