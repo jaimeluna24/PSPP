@@ -11,5 +11,6 @@
   </li> --}}
 @stop
 @section('content')
-    @livewire('detalle-actividad')
+    {{-- @livewire('detalle-actividad') --}}
+    <livewire:detalle-actividad :id="$id" />
 @stop

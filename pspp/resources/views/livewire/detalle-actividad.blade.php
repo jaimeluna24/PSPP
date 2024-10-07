@@ -3,7 +3,7 @@
     <div class="flex justify-between border-b-2 b-2 dark:border-gray-500">
         <div>
             <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">
-                Detalle de Actividad
+                Detalle de Actividad #{{ $id }}
                 <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">En progreso</span>
                 <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Finalizada</span>
             </h5>
@@ -48,22 +48,26 @@
             </div>
 
             <p class="font-semibold ">Nombre:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">Actividad la ucla se sjdnfke sjdfkjer kdbfhw ijsdbfiweb</p>
+            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->nombre }}</p>
 
             <p class="font-semibold">Descripción:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">esa jnfe fjf lksnfkerf lksdfkjnef</p>
+            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->descripcion }}</p>
 
             <p class="font-semibold">Área:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">Gerencia de Administración de Mantenimiento</p>
+            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->area }}</p>
 
             <p class="font-semibold">Encargado:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">Ing. Dennis Vasquez</p>
+            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->encargado }}</p>
 
             <p class="font-semibold ">Fecha de inicio:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">Semana #1 - 12/09/2024</p>
+            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $semana->semana }} - {{ $actividad->fecha_inicio }}</p>
 
             <p class="font-semibold ">Fecha de finalización:</p>
+            @if ($actividad->active)
             <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">En progreso</p>
+            @else
+                {{ $actividad->fecha_final }}
+            @endif
             <div class="flex justify-end">
                 <button data-modal-target="popup-modal-actividad" data-modal-toggle="popup-modal-actividad" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar</button>
                 <button data-modal-target="popup-modal-finalizar-actividad" data-modal-toggle="popup-modal-finalizar-actividad" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Finalizar</button>

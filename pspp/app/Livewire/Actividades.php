@@ -6,9 +6,15 @@ use Livewire\Component;
 use App\Models\Actividad;
 use App\Models\Semana;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class Actividades extends Component
 {
+    use WithFileUploads;
+    use WithPagination;
+
     public $nombre;
     public $descripcion;
     public $area;
@@ -17,22 +23,17 @@ class Actividades extends Component
     public $fecha_inicio;
     public $fecha_final;
     public $semana_id;
-    public $actividades;
-
+    public $fecha;
     public $avatar;
 
     public $modalCreate = false;
 
     public $query ='';
 
-    public function mount()
-    {
-        $this->actividades = Actividad::all();
-    }
-
     public function render()
     {
-        return view('livewire.actividades');
+        $actividades = Actividad::orderBy('id', 'desc')->paginate(6, pageName: 'page_actividad');
+        return view('livewire.actividades', ['actividades' => $actividades]);
     }
 
     public function rules()
@@ -42,7 +43,7 @@ class Actividades extends Component
             'descripcion' => 'required',
             'area' => 'required',
             'encargado' => 'required',
-            'fecha_inicio' => 'required',
+            // 'fecha_inicio' => 'required',
         ];
     }
 
@@ -53,7 +54,7 @@ class Actividades extends Component
             'descripcion.required' => 'El campo es requerido',
             'area.required' => 'El campo es requerido',
             'encargado.required' => 'El campo es requerido',
-            'fecha_inicio.required' => 'El campo es requerido',
+            // 'fecha_inicio.required' => 'El campo es requerido',
         ];
     }
 
@@ -71,6 +72,7 @@ class Actividades extends Component
         $this->active = '';
         $this->fecha_inicio = '';
         $this->avatar = '';
+        $this->fecha = '';
     }
 
     public function toActividades()
@@ -82,25 +84,42 @@ class Actividades extends Component
     public function create()
     {
         if($this->validate()){
-            $fecha = Carbon::parse($this->fecha);
 
-            $semana = Semana::where('fecha_inicio', '<=', $fecha)
-                            ->where('fecha_fin', '>=', $fecha)->first();
+
+            $semana = Semana::where('fecha_inicio', '<=', $this->fecha_inicio)
+                            ->where('fecha_fin', '>=', $this->fecha_inicio)->first();
+
+            // dd($semana);
             $actividad = new Actividad();
 
             $actividad->nombre = $this->nombre;
             $actividad->descripcion = $this->descripcion;
             $actividad->area = $this->area;
             $actividad->encargado = $this->encargado;
-            $actividad->active = $this->active;
+            $actividad->active = true;
             $actividad->fecha_inicio = $this->fecha_inicio;
             $actividad->semana_id = $semana->id;
 
+            // dd($this->avatar);
+            // if(!empty($this->avatar)){
+            //     $imagePath = $this->avatar->store('actividad/avatars', 'public');
+            //     $actividad->avatar = $imagePath;
+            // }
+
+
+
             $actividad->save();
+            $this->resetPage(pageName: 'page_actividad');
             notyf()->success('Actividad creada exitosamente');
+            $this->toActividades();
         }else{
             notyf()->error('Ha ocurrido un error al crear la actividad');
         }
+    }
+
+    public function toDetalles($id)
+    {
+        $this->emit('idActividad', $id);
     }
 
 

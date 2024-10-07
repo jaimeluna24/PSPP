@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->boolean('active')->default(true);
             $table->date('fecha_inicio');
-            $table->date('fecha_final');
+            $table->date('fecha_final')->nullable();
             $table->unsignedBigInteger('semana_id');
             $table->foreign('semana_id')->references('id')->on('semanas')->onDelete('cascade');
             $table->timestamps();
