@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('evidencia_tareas', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
+            $table->string('evidencia');
             $table->date('fecha');
             $table->unsignedBigInteger('tarea_id');
             $table->foreign('tarea_id')->references('id')->on('tareas')->onDelete('cascade');

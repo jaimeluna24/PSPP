@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('descripcion');
-            $table->string('resultado');
+            $table->string('resultado')->nullable();
             $table->string('observacion')->nullable();
             $table->date('fecha_inicio');
             $table->date('fecha_final');

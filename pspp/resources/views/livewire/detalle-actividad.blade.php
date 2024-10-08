@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div>
-                <button data-modal-target="default-modal" data-modal-toggle="default-modal"
+                <button data-modal-target="default-modal" data-modal-toggle="default-modal" wire:click="toCreate()"
                 type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar</button>
             </div>
         </div>
@@ -34,24 +34,31 @@
             <div class="grid grid-cols-3 gap-4">
                 <div></div>
                 <div class="flex justify-center text-xl text-center font-semibold">Actividad</div>
-                <div class="flex justify-end">
+                <div class="flex justify-end gap-4">
                     <button data-tooltip-target="tooltip-animation-evidencia-actividad" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20.5" height="18" viewBox="0 0 576 512"><path fill="#ffffff" d="M480 416v16c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V176c0-26.51 21.49-48 48-48h16v208c0 44.112 35.888 80 80 80zm96-80V80c0-26.51-21.49-48-48-48H144c-26.51 0-48 21.49-48 48v256c0 26.51 21.49 48 48 48h384c26.51 0 48-21.49 48-48M256 128c0 26.51-21.49 48-48 48s-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48m-96 144l55.515-55.515c4.686-4.686 12.284-4.686 16.971 0L272 256l135.515-135.515c4.686-4.686 12.284-4.686 16.971 0L512 208v112H160z"/></svg>
                         <span class="sr-only">Notifications</span>
                           <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">8</div>
                     </button>
+                    <button data-tooltip-target="tooltip-animation-editar-actividad" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
+                    </button>
                 </div>
                 <div id="tooltip-animation-evidencia-actividad" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                    Evidencia de actividad
+                    Evidencia actividad
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+                <div id="tooltip-animation-editar-actividad" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    Editar actividad
                     <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
             </div>
 
             <p class="font-semibold ">Nombre:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->nombre }}</p>
+            <p class="mb-3 text-gray-500  dark:text-gray-400 text-sm">{{ $actividad->nombre }}</p>
 
             <p class="font-semibold">Descripción:</p>
-            <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->descripcion }}</p>
+            <p class="mb-3 text-gray-500  dark:text-gray-400 text-sm">{{ $actividad->descripcion }}</p>
 
             <p class="font-semibold">Área:</p>
             <p class="mb-3 text-gray-500 truncate dark:text-gray-400 text-sm">{{ $actividad->area }}</p>
@@ -198,16 +205,23 @@
                 <div class="dark:text-white ">
                     <div class="grid grid-cols-3 gap-4">
                         <div class="flex justify-end col-span-2 text-xl text-center font-semibold">Detalle de tarea</div>
-                        <div class="flex justify-end">
+                        <div class="flex justify-end  gap-4">
                             <button data-tooltip-target="tooltip-animation-evidencia-tarea" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example"
                              type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20.5" height="18" viewBox="0 0 576 512"><path fill="#ffffff" d="M480 416v16c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V176c0-26.51 21.49-48 48-48h16v208c0 44.112 35.888 80 80 80zm96-80V80c0-26.51-21.49-48-48-48H144c-26.51 0-48 21.49-48 48v256c0 26.51 21.49 48 48 48h384c26.51 0 48-21.49 48-48M256 128c0 26.51-21.49 48-48 48s-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48m-96 144l55.515-55.515c4.686-4.686 12.284-4.686 16.971 0L272 256l135.515-135.515c4.686-4.686 12.284-4.686 16.971 0L512 208v112H160z"/></svg>
                                 <span class="sr-only">Notifications</span>
                                   <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">8</div>
                             </button>
+                            <button data-tooltip-target="tooltip-animation-editar-tarea" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
+                            </button>
                         </div>
                         <div id="tooltip-animation-evidencia-tarea" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                             Evidencia de tarea
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                        <div id="tooltip-animation-editar-tarea" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Editar tarea
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
                     </div>
@@ -291,50 +305,72 @@
 
       </div>
 
-      <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    @if ($modalCreate)
+    <div style="background-color: rgba(0,0,0,0.5)" id="default-modal" tabindex="-1" aria-hidden="true" class=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.crear-tarea')
-      </div>
-
-    <div id="popup-modal-actividad" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-       @include('livewire.modals.eliminar-actividad')
     </div>
+    @endif
 
-    <div id="popup-modal-tarea" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        @include('livewire.modals.eliminar-tarea')
-     </div>
+    @if ($modalDeleteActividad)
+    <div style="background-color: rgba(0,0,0,0.5)" id="popup-modal-actividad" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
+        @include('livewire.modals.eliminar-actividad')
+    </div>
+    @endif
 
-     <div id="popup-modal-finalizar-actividad" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+   @if ($modalDeleteTarea)
+   <div style="background-color: rgba(0,0,0,0.5)" id="popup-modal-tarea" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
+    @include('livewire.modals.eliminar-tarea')
+   </div>
+   @endif
+
+    @if ($modalFinalizarActividad)
+    <div style="background-color: rgba(0,0,0,0.5)" id="popup-modal-finalizar-actividad" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.modals.finalizar-actividad')
-     </div>
+    </div>
+    @endif
 
-     <div id="popup-modal-finalizar-tarea" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    @if ($modalFinalizarTarea)
+    <div style="background-color: rgba(0,0,0,0.5)" id="popup-modal-finalizar-tarea" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.modals.finalizar-tarea')
-     </div>
+    </div>
+    @endif
 
-     <!-- drawer component -->
+    @if ($drawerActividad)
+        <!-- drawer component -->
      <div id="drawer-example" class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
         @include('livewire.drawers.evidencia-actividad')
      </div>
+    @endif
 
-     <!-- drawer component -->
+     @if ($drawerTarea)
+         <!-- drawer component -->
      <div id="drawer-right-example" class="fixed top-0 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-right-label">
-       @include('livewire.drawers.evidencia-tarea')
-     </div>
+        @include('livewire.drawers.evidencia-tarea')
+      </div>
+     @endif
 
-     <div id="default-modal-evidencia-actividad-image" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-       @include('livewire.modals.evidencia-image-actividad')
-     </div>
+      @if ($modalEvidenciaActividad)
+      <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-evidencia-actividad-image" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
+        @include('livewire.modals.evidencia-image-actividad')
+      </div>
+      @endif
 
-     <div id="default-modal-evidencia-tarea-image" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      @if ($modalEvidenciaTarea)
+      <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-evidencia-tarea-image" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.modals.evidencia-image-tarea')
       </div>
+      @endif
 
-      <div id="default-modal-agregar-evidencia-tarea" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+     @if ($modalAgregarEvidenciaTarea)
+     <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-agregar-evidencia-tarea" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.modals.agregar-evidencia-tarea')
       </div>
+     @endif
 
-      <div id="default-modal-agregar-evidencia-actividad" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+     @if ($modalAgregarEvidenciaActividad)
+     <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-agregar-evidencia-actividad" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.modals.agregar-evidencia-actividad')
       </div>
+     @endif
 
 </div>

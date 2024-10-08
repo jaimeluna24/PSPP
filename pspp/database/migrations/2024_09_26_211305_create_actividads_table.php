@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('descripcion');
             $table->string('area');
             $table->string('encargado');
-            $table->string('avatar')->nullable();
             $table->boolean('active')->default(true);
             $table->date('fecha_inicio');
             $table->date('fecha_final')->nullable();
