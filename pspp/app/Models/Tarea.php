@@ -27,4 +27,9 @@ class Tarea extends Model
     {
         return $this->belongsTo(Actividad::class, 'actividad_id');
     }
+
+    public function evidencia()
+    {
+        return $this->hasMany(EvidenciaTarea::class, 'tarea_id');
+    }
 }

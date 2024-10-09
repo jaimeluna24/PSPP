@@ -3,16 +3,28 @@
 namespace App\Livewire;
 
 use App\Models\Actividad;
+use App\Models\EvidenciaTarea;
 use App\Models\Semana;
 use Livewire\Component;
+use App\Models\Tarea;
+use Carbon\Carbon;
+use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 
 class DetalleActividad extends Component
 {
+    use WithPagination;
+    use WithFileUploads;
+
 
     //Variables generales para mostrar datos de la actividad
     public $id;
     public $actividad;
     public $semana;
+    public $detalleTarea = false;
+    public $tareaSeleccionada;
+    public $listaEvidenciaTarea;
+    public $listaEvidenciaActividad;
 
     //Variables para modales
     public $modalCreate = false;
@@ -47,6 +59,23 @@ class DetalleActividad extends Component
     public $fecha_finalActividad;
     public $evidenciaActividad;
 
+    public function rules()
+    {
+        return [
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'fecha_inicio' => 'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'nombre.required' => 'El campo es requerido',
+            'descripcion.required' => 'El campo es requerido',
+            'fecha_inicio.required' => 'El campo es requerido',
+        ];
+    }
 
 
     public function mount($id)
@@ -54,12 +83,68 @@ class DetalleActividad extends Component
         $this->id = $id;
         $this->actividad = Actividad::find($id);
         $this->semana = Semana::find($this->actividad->semana_id);
-
     }
 
     public function render()
     {
-        return view('livewire.detalle-actividad');
+        $tareas = Tarea::where('actividad_id', $this->id)->orderBy('id', 'desc')->paginate(6, pageName: 'page_tarea');
+        return view('livewire.detalle-actividad', ['tareas' => $tareas]);
+    }
+
+    //Funciones para tareas
+    public function create()
+    {
+        $this->validate();
+        $tarea = new Tarea();
+
+        $tarea->nombre = $this->nombre;
+        $tarea->descripcion = $this->descripcion;
+        if(!empty($this->observacion)){
+            $tarea->observacion = $this->observacion;
+        }else{
+            $tarea->observacion = 'Sin observación';
+        }
+        $tarea->fecha_inicio = $this->fecha_inicio;
+        $tarea->active = true;
+        $tarea->actividad_id = $this->id;
+
+        $tarea->save();
+        $this->resetPage(pageName: 'page_tarea');
+        notyf()->success('Tarea creada exitosamente');
+        $this->toDetalleActividad();
+    }
+
+    public function toDetallesTarea($id)
+    {
+        $this->tareaSeleccionada = Tarea::find($id);
+        $this->detalleTarea = true;
+        $this->listaEvidenciaTarea = EvidenciaTarea::where('tarea_id', $id)->get();
+    }
+
+    public function activarTarea()
+    {
+        $this->tareaSeleccionada->update([
+            'active' => true,
+            'fecha_final' => null
+        ]);
+        notyf()->success('Tarea activada exitosamente');
+    }
+
+    public function finalizarTarea()
+    {
+        $this->tareaSeleccionada->update([
+            'active' => false,
+            'fecha_final' => Carbon::now('America/Tegucigalpa')->format('Y-m-d')
+        ]);
+        notyf()->success('Tarea finalizada exitosamente');
+        $this->toDetalleActividad();
+    }
+
+    public function eliminarTarea()
+    {
+        $this->tareaSeleccionada->delete();
+        notyf()->warning('Tarea eliminada exitosamente');
+        $this->toDetalleActividad();
     }
 
 
@@ -68,7 +153,7 @@ class DetalleActividad extends Component
 
 
 
-    //Funciones para abrir trabajar con modales
+    //Funciones para trabajar con modales
     public function toCreate()
     {
         $this->modalCreate = true;
@@ -91,7 +176,11 @@ class DetalleActividad extends Component
 
     public function toFinalizarTarea()
     {
-        $this->modalFinalizarTarea = true;
+        if(!empty($this->tareaSeleccionada->resultado)){
+            $this->modalFinalizarTarea = true;
+        }else{
+            notyf()->error('No pudes finalizar la tarea sin ingresar resultados');
+        }
     }
 
     public function toDrawerActividad()
@@ -136,6 +225,7 @@ class DetalleActividad extends Component
         $this->modalEvidenciaTarea = false;
         $this->modalAgregarEvidenciaActividad = false;
         $this->modalAgregarEvidenciaTarea = false;
+        $this->resetInputs();
     }
 
     // Función para limpiar los campos

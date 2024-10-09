@@ -44,9 +44,9 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                     <p class="text-sm text-gray-700 leading-5 dark:text-gray-400">
                         <span>{!! __('Mostrando') !!}</span>
                         <span class="font-medium">{{ $paginator->firstItem() }}</span>
-                        <span>{!! __('de') !!}</span>
-                        <span class="font-medium">{{ $paginator->lastItem() }}</span>
                         <span>{!! __('a') !!}</span>
+                        <span class="font-medium">{{ $paginator->lastItem() }}</span>
+                        <span>{!! __('de') !!}</span>
                         <span class="font-medium">{{ $paginator->total() }}</span>
                         <span>{!! __('resultados') !!}</span>
                     </p>

@@ -43,7 +43,7 @@ class Actividades extends Component
             'descripcion' => 'required',
             'area' => 'required',
             'encargado' => 'required',
-            // 'fecha_inicio' => 'required',
+            'fecha_inicio' => 'required',
         ];
     }
 
@@ -54,7 +54,7 @@ class Actividades extends Component
             'descripcion.required' => 'El campo es requerido',
             'area.required' => 'El campo es requerido',
             'encargado.required' => 'El campo es requerido',
-            // 'fecha_inicio.required' => 'El campo es requerido',
+            'fecha_inicio.required' => 'El campo es requerido',
         ];
     }
 

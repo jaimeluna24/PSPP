@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('resultado')->nullable();
             $table->string('observacion')->nullable();
             $table->date('fecha_inicio');
-            $table->date('fecha_final');
+            $table->date('fecha_final')->nullable();
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('actividad_id');
             $table->foreign('actividad_id')->references('id')->on('actividads')->onDelete('cascade');
