@@ -10,12 +10,12 @@ use App\Models\Tarea;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class DetalleActividad extends Component
 {
     use WithPagination;
     use WithFileUploads;
-
 
     //Variables generales para mostrar datos de la actividad
     public $id;
@@ -25,6 +25,7 @@ class DetalleActividad extends Component
     public $tareaSeleccionada;
     public $listaEvidenciaTarea;
     public $listaEvidenciaActividad;
+    public $query = '';
 
     //Variables para modales
     public $modalCreate = false;
@@ -38,8 +39,10 @@ class DetalleActividad extends Component
     public $modalEvidenciaTarea = false;
     public $modalAgregarEvidenciaTarea = false;
     public $modalAgregarEvidenciaActividad = false;
+    public $modalEditarTarea = false;
+    public $modalEditarActividad = false;
 
-    //Variables para crear tareas
+    //Variables para tareas
     public $nombre;
     public $descripcion;
     public $resultado;
@@ -49,7 +52,7 @@ class DetalleActividad extends Component
     public $evidenciaTarea;
     public $active;
 
-    //Variabes para editar actividad
+    //Variabes para actividad
     public $nombreActividad;
     public $descripcionActividad;
     public $areaActividad;
@@ -58,6 +61,12 @@ class DetalleActividad extends Component
     public $fecha_inicioActividad;
     public $fecha_finalActividad;
     public $evidenciaActividad;
+
+    //Variables para evidencia de tareas
+    public $tareaTitulo;
+    public $tareaEvidencia;
+    public $evidenciaSeleccionada;
+    public $cantidadEvidenciaTareas;
 
     public function rules()
     {
@@ -87,7 +96,7 @@ class DetalleActividad extends Component
 
     public function render()
     {
-        $tareas = Tarea::where('actividad_id', $this->id)->orderBy('id', 'desc')->paginate(6, pageName: 'page_tarea');
+        $tareas = Tarea::where('actividad_id', $this->id)->where('nombre', 'like', '%'.$this->query.'%')->orderBy('id', 'desc')->paginate(6, pageName: 'page_tarea');
         return view('livewire.detalle-actividad', ['tareas' => $tareas]);
     }
 
@@ -119,6 +128,7 @@ class DetalleActividad extends Component
         $this->tareaSeleccionada = Tarea::find($id);
         $this->detalleTarea = true;
         $this->listaEvidenciaTarea = EvidenciaTarea::where('tarea_id', $id)->get();
+        $this->cantidadEvidenciaTareas = $this->listaEvidenciaTarea->count();
     }
 
     public function activarTarea()
@@ -147,10 +157,111 @@ class DetalleActividad extends Component
         $this->toDetalleActividad();
     }
 
+    public function agregarEvidenciaTarea()
+    {
+        $this->validate([
+            'tareaEvidencia' => 'required',
+            'tareaTitulo' => 'required'
+        ]);
+        $imagePath = $this->tareaEvidencia->store('tareas/evidencia', 'public');
+        $evidenciaTarea = new EvidenciaTarea();
 
+        $evidenciaTarea->titulo = $this->tareaTitulo;
+        $evidenciaTarea->evidencia = $imagePath;
+        $evidenciaTarea->fecha = Carbon::now('America/Tegucigalpa')->format('Y-m-d');
+        $evidenciaTarea->tarea_id = $this->tareaSeleccionada->id;
 
+        // dd($evidenciaTarea);
+        $evidenciaTarea->save();
 
+        notyf()->success('Evidencia guardada exitosamente');
+        $this->toDetallesTarea($this->tareaSeleccionada->id);
 
+        $this->modalAgregarEvidenciaTarea = false;
+        $this->tareaTitulo = '';
+        $this->tareaEvidencia = '';
+    }
+
+    public function descargarTareaImagen($ruta)
+    {
+        if (Storage::disk('public')->exists($ruta['evidencia'])) {
+            $path = storage_path('app/public/' . $ruta['evidencia']);
+
+            return response()->download($path, $ruta['titulo'].'.jpg');
+            notyf()->success('Descargando imagen');
+        } else {
+            notyf()->error('Error al descargar la imagen');
+        }
+    }
+
+    public function editarTarea()
+    {
+        $this->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'resultado' => 'required',
+            'observacion' => 'required',
+            'fecha_inicio' => 'required'
+        ]);
+
+        $this->tareaSeleccionada->update([
+            'nombre' => $this->nombre,
+            'descripcion' => $this->descripcion,
+            'resultado' => $this->resultado,
+            'observacion' => $this->observacion,
+            'fecha_inicio' => $this->fecha_inicio,
+        ]);
+        notyf()->success('Tarea actualizada exitosamente');
+        $this->modalEditarTarea = false;
+    }
+
+    //Funciones para atividades
+    public function editarActividad()
+    {
+        $this->validate([
+            'nombreActividad' => 'required',
+            'descripcionActividad' => 'required',
+            'areaActividad' => 'required',
+            'encargadoActividad' => 'required',
+            'fecha_inicioActividad' => 'required'
+        ]);
+
+        $this->actividad->update([
+            'nombre' => $this->nombreActividad,
+            'descripcion' => $this->descripcionActividad,
+            'area' => $this->areaActividad,
+            'encargado' => $this->encargadoActividad,
+            'fecha_inicio' => $this->fecha_inicioActividad,
+        ]);
+        notyf()->success('Actividad actualizada exitosamente');
+        $this->modalEditarActividad = false;
+    }
+
+    public function finalizarActividad()
+    {
+        $this->actividad->update([
+            'active' => false,
+            'fecha_final' => Carbon::now('America/Tegucigalpa')->format('Y-m-d')
+        ]);
+        notyf()->success('Actividad finalizada exitosamente');
+        $this->toDetalleActividad();
+    }
+
+    public function activarActividad()
+    {
+        $this->actividad->update([
+            'active' => true,
+            'fecha_final' => null
+        ]);
+        notyf()->success('Actividad activada exitosamente');
+    }
+
+    public function eliminarActividad()
+    {
+        $this->actividad->delete();
+        notyf()->warning('Actividad eliminada exitosamente');
+        return redirect()->route('actividades');
+    }
 
 
     //Funciones para trabajar con modales
@@ -198,9 +309,15 @@ class DetalleActividad extends Component
         $this->modalEvidenciaActividad = true;
     }
 
-    public function toEvidenciaTarea()
+    public function toEvidenciaTarea($id)
     {
+        $this->evidenciaSeleccionada = EvidenciaTarea::find($id);
         $this->modalEvidenciaTarea = true;
+    }
+
+    public function cerrarEvidenciaTarea()
+    {
+        $this->modalEvidenciaTarea = false;
     }
 
     public function toAgregarEvidenciaActividad()
@@ -213,10 +330,37 @@ class DetalleActividad extends Component
         $this->modalAgregarEvidenciaTarea = true;
     }
 
+    public function toEvidenciaTareaRetorno()
+    {
+        $this->modalAgregarEvidenciaTarea = false;
+    }
+
+    public function toEditarTarea($id)
+    {
+        $tarea = Tarea::find($id);
+        $this->modalEditarTarea = true;
+        $this->nombre = $tarea->nombre;
+        $this->descripcion = $tarea->descripcion;
+        $this->resultado = $tarea->resultado;
+        $this->observacion = $tarea->observacion;
+        $this->fecha_inicio = $tarea->fecha_inicio;
+    }
+
+    public function toEditarActividad()
+    {
+        $this->modalEditarActividad = true;
+        $this->nombreActividad = $this->actividad->nombre;
+        $this->descripcionActividad = $this->actividad->descripcion;
+        $this->areaActividad = $this->actividad->area;
+        $this->encargadoActividad = $this->actividad->encargado;
+        $this->fecha_inicioActividad = $this->actividad->fecha_inicio;
+    }
+
     public function toDetalleActividad()
     {
         $this->modalCreate = false;
         $this->modalDeleteTarea = false;
+        $this->modalDeleteActividad = false;
         $this->modalFinalizarActividad = false;
         $this->modalFinalizarTarea = false;
         $this->drawerActividad = false;
@@ -225,6 +369,8 @@ class DetalleActividad extends Component
         $this->modalEvidenciaTarea = false;
         $this->modalAgregarEvidenciaActividad = false;
         $this->modalAgregarEvidenciaTarea = false;
+        $this->modalEditarTarea = false;
+        $this->modalEditarActividad = false;
         $this->resetInputs();
     }
 
@@ -251,6 +397,4 @@ class DetalleActividad extends Component
         $this->fecha_final = '';
         $this->evidenciaTarea = '';
     }
-
-
 }

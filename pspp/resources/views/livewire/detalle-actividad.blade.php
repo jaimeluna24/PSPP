@@ -6,14 +6,11 @@
                 Detalle de Actividad #{{ $id }}
                 @if ($actividad->active)
                 <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">En progreso</span>
-
                 @else
                 <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Finalizada</span>
-
                 @endif
             </h5>
         </div>
-
         <div class="flex gap-3 pl-3">
             <div class="pb-4 bg-white dark:bg-gray-800">
                 <label for="table-search" class="sr-only">Search</label>
@@ -23,7 +20,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                         </svg>
                     </div>
-                    <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar tarea">
+                    <input wire:model.live="query" type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar tarea">
                 </div>
             </div>
             <div>
@@ -31,28 +28,29 @@
                 type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar</button>
             </div>
         </div>
-
     </div>
-
     <div class="grid grid-cols-3 gap-5 pt-3">
         <div class="dark:text-white ">
             <div class="grid grid-cols-3 gap-4">
                 <div></div>
                 <div class="flex justify-center text-xl text-center font-semibold">Actividad</div>
                 <div class="flex justify-end gap-4">
-                    <button data-tooltip-target="tooltip-animation-evidencia-actividad" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    {{-- <button data-tooltip-target="tooltip-animation-evidencia-actividad" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20.5" height="18" viewBox="0 0 576 512"><path fill="#ffffff" d="M480 416v16c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V176c0-26.51 21.49-48 48-48h16v208c0 44.112 35.888 80 80 80zm96-80V80c0-26.51-21.49-48-48-48H144c-26.51 0-48 21.49-48 48v256c0 26.51 21.49 48 48 48h384c26.51 0 48-21.49 48-48M256 128c0 26.51-21.49 48-48 48s-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48m-96 144l55.515-55.515c4.686-4.686 12.284-4.686 16.971 0L272 256l135.515-135.515c4.686-4.686 12.284-4.686 16.971 0L512 208v112H160z"/></svg>
                         <span class="sr-only">Notifications</span>
                           <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">8</div>
-                    </button>
-                    <button data-tooltip-target="tooltip-animation-editar-actividad" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600">
+                    </button> --}}
+                    @if ($actividad->active)
+                    <button wire:click="toEditarActividad()" data-tooltip-target="tooltip-animation-editar-actividad" data-drawer-target="drawer-example" data-drawer-show="drawer-example" aria-controls="drawer-example" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
                     </button>
+                    @endif
+
                 </div>
-                <div id="tooltip-animation-evidencia-actividad" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                {{-- <div id="tooltip-animation-evidencia-actividad" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                     Evidencia actividad
                     <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
+                </div> --}}
                 <div id="tooltip-animation-editar-actividad" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                     Editar actividad
                     <div class="tooltip-arrow" data-popper-arrow></div>
@@ -81,15 +79,18 @@
                 {{ $actividad->fecha_final }}
             @endif
             <div class="flex justify-end">
-                <button data-modal-target="popup-modal-actividad" data-modal-toggle="popup-modal-actividad" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar</button>
-                <button data-modal-target="popup-modal-finalizar-actividad" data-modal-toggle="popup-modal-finalizar-actividad" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Finalizar</button>
+                <button wire:click="toDeleteActividad()" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar</button>
+                @if ($actividad->active)
+                <button wire:click="toFinalizarActividad()" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Finalizar</button>
+                @else
+                <button wire:click="activarActividad()" type="button" class="text-white bg-gray-400 hover:bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-gray-400 dark:hover:bg-gray-500 dark:focus:ring-gray-600">Activar</button>
+
+                @endif
             </div>
         </div>
         <div class="border-l pr-5 dark:border-gray-500  pl-5 border-r h-auto">
-
             <h3 class="text-xl text-center font-semibold dark:text-white">Lista de tareas</h3>
             <div>
-
                 <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700 mt-2">
                     @forelse ($tareas as $item)
                     <li class="pb-3 sm:pb-2">
@@ -127,8 +128,6 @@
                                 <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
                               @endif
-
-
                           </div>
                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                              <button wire:click="toDetallesTarea({{ $item->id }})" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Detalles</button>
@@ -203,18 +202,20 @@
                     <div class="grid grid-cols-3 gap-4">
                         <div class="flex justify-end col-span-2 text-xl text-center font-semibold">Detalle de tarea</div>
                         <div class="flex justify-end  gap-4">
-                            <button data-tooltip-target="tooltip-animation-evidencia-tarea" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example"
+                            @if ($detalleTarea )
+                            <button wire:click="toDrawerTarea" data-tooltip-target="tooltip-animation-evidencia-tarea" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example"
                              type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20.5" height="18" viewBox="0 0 576 512"><path fill="#ffffff" d="M480 416v16c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V176c0-26.51 21.49-48 48-48h16v208c0 44.112 35.888 80 80 80zm96-80V80c0-26.51-21.49-48-48-48H144c-26.51 0-48 21.49-48 48v256c0 26.51 21.49 48 48 48h384c26.51 0 48-21.49 48-48M256 128c0 26.51-21.49 48-48 48s-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48m-96 144l55.515-55.515c4.686-4.686 12.284-4.686 16.971 0L272 256l135.515-135.515c4.686-4.686 12.284-4.686 16.971 0L512 208v112H160z"/></svg>
                                 <span class="sr-only">Notifications</span>
-                                  <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">8</div>
+                                  <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{ $cantidadEvidenciaTareas }}</div>
                             </button>
                             <div id="tooltip-animation-evidencia-tarea" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                 Evidencia de tarea
                                 <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
-                            @if ($detalleTarea && $tareaSeleccionada->active)
-                            <button data-tooltip-target="tooltip-animation-editar-tarea" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600">
+                            @endif
+                            @if($detalleTarea && $tareaSeleccionada->active && $actividad->active)
+                            <button wire:click="toEditarTarea({{ $tareaSeleccionada->id }})" data-tooltip-target="tooltip-animation-editar-tarea" type="button" class="relative inline-flex items-center px-2 py-1 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
                             </button>
                             <div id="tooltip-animation-editar-tarea" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
@@ -256,17 +257,17 @@
 
                         <div class="flex justify-end">
                             <button wire:click="toDeleteTarea()" data-modal-target="popup-modal-tarea" data-modal-toggle="popup-modal-tarea" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar</button>
+                            @if($actividad->active)
                             @if ($tareaSeleccionada->active == false)
                             <button wire:click="activarTarea()" data-modal-target="popup-modal-finalizar-tarea" data-modal-toggle="popup-modal-finalizar-tarea" type="button" class="text-white bg-gray-400 hover:bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-gray-400 dark:hover:bg-gray-500 dark:focus:ring-gray-600">Activar</button>
 
                             @else
                             <button wire:click="toFinalizarTarea()" data-modal-target="popup-modal-finalizar-tarea" data-modal-toggle="popup-modal-finalizar-tarea" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Finalizar</button>
-
+                            @endif
                             @endif
                         </div>
                     </div>
             @else
-
             <div class="flex items-center h-auto w-full mt-5">
                 <div class="w-full flex items-center flex-wrap justify-center gap-10">
                     <div class="grid gap-4 w-60">
@@ -320,11 +321,7 @@
                 </div>
             </div>
             @endif
-
-
         </div>
-
-
       </div>
 
     @if ($modalCreate)
@@ -359,17 +356,21 @@
 
     {{-- @if ($drawerActividad) --}}
         <!-- drawer component -->
-     <div id="drawer-example" class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
-        @include('livewire.drawers.evidencia-actividad')
-     </div>
+
+        <div  style="background-color: rgba(0,0,0,0.5);" class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
+            @include('livewire.drawers.evidencia-actividad')
+         </div>
+
     {{-- @endif --}}
 
-     {{-- @if ($drawerTarea) --}}
+     @if ($drawerTarea)
          <!-- drawer component -->
-     <div id="drawer-right-example" class="fixed top-0 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-right-label">
-        @include('livewire.drawers.evidencia-tarea')
-      </div>
-     {{-- @endif --}}
+         <div style="background-color: rgba(0,0,0,0.5); height: 100vh; " class="w-full h-full fixed top-0 left-0 z-20 transition-transform">
+            <div id="drawer-right-example" class="fixed top-0 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-right-label">
+                @include('livewire.drawers.evidencia-tarea')
+              </div>
+         </div>
+     @endif
 
       @if ($modalEvidenciaActividad)
       <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-evidencia-actividad-image" tabindex="-1" aria-hidden="true" class=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
@@ -392,6 +393,18 @@
      @if ($modalAgregarEvidenciaActividad)
      <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-agregar-evidencia-actividad" tabindex="-1" aria-hidden="true" class=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
         @include('livewire.modals.agregar-evidencia-actividad')
+      </div>
+     @endif
+
+     @if ($modalEditarTarea)
+     <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-agregar-evidencia-actividad" tabindex="-1" aria-hidden="true" class=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
+        @include('livewire.modals.editar-tarea')
+      </div>
+     @endif
+
+     @if ($modalEditarActividad)
+     <div style="background-color: rgba(0,0,0,0.5)" id="default-modal-agregar-evidencia-actividad" tabindex="-1" aria-hidden="true" class=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
+        @include('livewire.modals.editar-actividad')
       </div>
      @endif
 

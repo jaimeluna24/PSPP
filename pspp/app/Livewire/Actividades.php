@@ -32,7 +32,7 @@ class Actividades extends Component
 
     public function render()
     {
-        $actividades = Actividad::orderBy('id', 'desc')->paginate(6, pageName: 'page_actividad');
+        $actividades = Actividad::where('nombre', 'like', '%'.$this->query.'%')->orderBy('id', 'desc')->paginate(6, pageName: 'page_actividad');
         return view('livewire.actividades', ['actividades' => $actividades]);
     }
 
