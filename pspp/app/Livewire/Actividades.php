@@ -31,11 +31,16 @@ class Actividades extends Component
 
     public $query ='';
     public $usuario;
+    public $confirmed = false;
 
     public function mount()
     {
         // Obtén el usuario autenticado
         $this->usuario = Auth::user();
+
+        if($this->usuario->confirmed == false){
+            $this->confirmed = true;
+        }
     }
 
     public function render()

@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+
 
 class LoginController extends Controller
 {
@@ -24,13 +27,21 @@ class LoginController extends Controller
             'password.confirmed' => 'Las contraseñas no coinciden.',
         ]);
 
+        $validatedData['confirmation_code'] = Str::random(25);
+
         $user = new User();
 
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->password = Hash::make($validatedData['password']);
+        $user->confirmation_code = $validatedData['confirmation_code'];
 
         $user->save();
+
+          // Send confirmation code
+        Mail::send('auth.confirmation_code', $validatedData, function($message) use ($validatedData) {
+            $message->to($validatedData['email'], $validatedData['name'])->subject('Por favor confirma tu correo');
+        });
 
         Auth::login($user);
 
@@ -70,5 +81,23 @@ class LoginController extends Controller
 
         return redirect(route('login'));
     }
+
+    public function verify($code)
+{
+    $user = User::where('confirmation_code', $code)->first();
+
+    if (! $user)
+        return redirect('/');
+
+    $user->confirmed = true;
+    $user->confirmation_code = null;
+    $user->save();
+
+
+    notyf()->success('Correo confirmado exitosamente');
+
+
+    return redirect('/actividades')->with('notification', 'Has confirmado correctamente tu correo!');
+}
 
 }
