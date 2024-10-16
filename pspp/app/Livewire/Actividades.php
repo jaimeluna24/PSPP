@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Actividades extends Component
 {
@@ -29,10 +30,17 @@ class Actividades extends Component
     public $modalCreate = false;
 
     public $query ='';
+    public $usuario;
+
+    public function mount()
+    {
+        // Obtén el usuario autenticado
+        $this->usuario = Auth::user();
+    }
 
     public function render()
     {
-        $actividades = Actividad::where('nombre', 'like', '%'.$this->query.'%')->orderBy('id', 'desc')->paginate(6, pageName: 'page_actividad');
+        $actividades = Actividad::where('nombre', 'like', '%'.$this->query.'%')->where('usuario_id', $this->usuario->id)->orderBy('id', 'desc')->paginate(6, pageName: 'page_actividad');
         return view('livewire.actividades', ['actividades' => $actividades]);
     }
 
@@ -99,6 +107,7 @@ class Actividades extends Component
             $actividad->active = true;
             $actividad->fecha_inicio = $this->fecha_inicio;
             $actividad->semana_id = $semana->id;
+            $actividad->usuario_id = $this->usuario->id;
 
             // dd($this->avatar);
             // if(!empty($this->avatar)){

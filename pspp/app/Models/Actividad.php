@@ -21,11 +21,17 @@ class Actividad extends Model
         'fecha_inicio',
         'fecha_final',
         'semana_id',
+        'usuario_id'
     ];
 
     public function semana()
     {
         return $this->belongsTo(Semana::class, 'semana_id');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 
     public function evidencia()
